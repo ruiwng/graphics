@@ -1,1 +1,2 @@
-MIT graphics assignments, please refer to https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-837-computer-graphics-fall-2012/ for more information.
+# MIT graphics assignments
+please refer to https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-837-computer-graphics-fall-2012/ for more information.
