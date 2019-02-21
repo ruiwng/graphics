@@ -1,4 +1,4 @@
-# OpenGL Mesh View's features:
+# OpenGL Mesh View's features
 1. programmable rendering pipeline
 2. parse .obj files
 3. control camera's position and zoom in and out by mouse
