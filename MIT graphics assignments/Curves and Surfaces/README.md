@@ -1,4 +1,4 @@
-features
+# Curves and Surfaces' features
 1. use fixed rendering pipeline
 2. parse and show bezier B-spline curves and surfaces
 3. generate meshes on the fly
