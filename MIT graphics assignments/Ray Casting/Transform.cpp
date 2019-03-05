@@ -8,13 +8,10 @@ bool Transform::intersect(const Ray& r, Hit& h, float tmin) {
 	Vector3f oOrigin = (transform * Vector4f(r.getOrigin(), 1.0f)).xyz();
 	Vector3f oDir = (transform * Vector4f(r.getDirection(), 0.0f)).xyz();
 	Ray oRay(oOrigin, oDir);
-	Hit oHit;
-	bool isHit = o->intersect(oRay, oHit, tmin);
+	bool isHit = o->intersect(oRay, h, tmin);
 	if (isHit) {
-		Vector4f wNormal = transform.transposed() * Vector4f(oHit.getNormal(), 0.0f);
-		h.set(oHit.getT(), oHit.getMaterial(), wNormal.xyz().normalized());
-		if (oHit.hasTex)
-			h.setTexCoord(oHit.texCoord);
+		Vector4f wNormal = transform.transposed() * Vector4f(h.getNormal(), 0.0f);
+		h.set(h.getT(), h.getMaterial(), wNormal.xyz().normalized());
 	}
 	return isHit;
 }
