@@ -1,6 +1,6 @@
-# Ray Casting's feature
+# Ray Casting's features
 1. add intersection algorithm: ray-sphere intersection, ray-plane intersection, ray-triangle intersection, ray-trianglemesh intersection
-2. use AABB(Axis Aligned Bounding Box) to accelerate intersction calculation of ray and triangle mesh
+2. use AABB(Axis Aligned Bounding Box) to accelerate intersection calculation of ray and triangle mesh
 3. parse scene file with the suffix ".txt"
 3. the transformation of point, direction and normal between different coordinate system
 4. output depth map and normal map to help debug
