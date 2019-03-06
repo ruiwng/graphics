@@ -6,4 +6,4 @@
 5. Anti-aliasing
  1). Jittered sampling
  2). Gaussian blur
- 4). Down-sampling
+ 3). Down-sampling
