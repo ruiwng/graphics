@@ -125,7 +125,7 @@ int main( int argc, char* argv[] )
 
 			if (isIntersect) {
 				Vector3f hitPoint = ray.getOrigin() + ray.getDirection() * hit.getT();
-				Vector3f color(ambient);
+				Vector3f color(ambient * hit.getMaterial()->getDiffuseColor());
 				for (int k = 0; k < numLight; ++k) {
 					Light *light = sceneParser->getLight(k);
 					Vector3f direction, col;
