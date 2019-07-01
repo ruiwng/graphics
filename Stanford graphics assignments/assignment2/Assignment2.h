@@ -27,11 +27,17 @@ private:
 
     virtual void SetupCamera();
 
+	static std::string ReadFile(const char* fileName);
+
     std::shared_ptr<class SceneObject> sceneObject;
 
     std::shared_ptr<class Light> pointLight;
 
     std::vector<glm::vec4> vertexPositions;
+
+	GLuint vao;
+
+	GLuint shaderProgramId;
 };
 
 #endif
