@@ -45,6 +45,13 @@ std::shared_ptr<RenderingObject> CreateIcoSphere(std::shared_ptr<ShaderProgram> 
  */
 std::shared_ptr<RenderingObject> CreatePlane(std::shared_ptr<ShaderProgram> inputShader);
 
+/*! \brief Creates a torus
+ *  \param inputShader The shader to use.
+ *  \param bigRaidus the big radius.
+ *  \param smallRadius the small radius.
+ *  \param refinementSteps The number of times to subdivide the torus.
+*/
+std::shared_ptr<RenderingObject> CreateTorus(std::shared_ptr<ShaderProgram> inputShader, float bigRadius, float smallRadius, int refinementSteps);
 }
 
 #endif

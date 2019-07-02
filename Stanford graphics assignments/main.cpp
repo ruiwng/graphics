@@ -11,8 +11,8 @@
 // Change this line to switch between the assignments
 // #define APPLICATION Assignment1
 // For example:
-#define APPLICATION Assignment2
-// #define APPLICATION Assignment3
+// #define APPLICATION Assignment2
+#define APPLICATION Assignment3
 // #define APPLICATION Assignment4
 // #define APPLICATION Assignment5
 

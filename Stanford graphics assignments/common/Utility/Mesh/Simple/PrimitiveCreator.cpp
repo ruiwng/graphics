@@ -45,6 +45,66 @@ std::shared_ptr<RenderingObject> CreatePlane(std::shared_ptr<ShaderProgram> inpu
     return newObj;
 }
 
+std::shared_ptr<RenderingObject> CreateTorus(std::shared_ptr<ShaderProgram> inputShader, float bigRadius, float smallRadius, int refinementSteps) {
+	
+	using CirclePositionArray = std::vector<glm::vec2>;
+	std::unique_ptr<CirclePositionArray> circlePositions = make_unique<CirclePositionArray>();
+	circlePositions->reserve(refinementSteps);
+	float step = 2.0f * PI / refinementSteps;
+	float currentStep = 0.0f;
+	for (int i = 0; i < refinementSteps; ++i)
+	{
+		circlePositions->emplace_back(glm::vec2(cos(currentStep), sin(currentStep)));
+		currentStep += step;
+	}
+
+	std::unique_ptr<RenderingObject::PositionArray> vertexPositions = make_unique<RenderingObject::PositionArray>();
+	vertexPositions->reserve(refinementSteps * refinementSteps);
+	std::unique_ptr<RenderingObject::NormalArray> normalArray = make_unique<RenderingObject::NormalArray>();
+	normalArray->reserve(refinementSteps * refinementSteps);
+	std::unique_ptr<RenderingObject::IndexArray> indexArray = make_unique<RenderingObject::IndexArray>();
+	indexArray->reserve(refinementSteps * refinementSteps * 3);
+	int index, indexA, indexB, indexC, indexD;
+	for (int i = 0; i < refinementSteps; ++i) {
+		glm::mat4 m;
+		float x = circlePositions->at(i).x;
+		float y = circlePositions->at(i).y;
+		m[0] = smallRadius * glm::vec4(   x, 0.0f,    y, 0.0f);
+		m[1] = smallRadius * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+		m[2] = smallRadius * glm::vec4(   y, 0.0f,   -x, 0.0f);
+		m[3] = glm::vec4(bigRadius * x, 0.0f, bigRadius * y, 1.0f);
+		//m[3] = bigRadius * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+		index = i * refinementSteps;
+		for (int j = 0; j < refinementSteps; ++j) {
+			float x1 = circlePositions->at(j).x;
+			float y1 = circlePositions->at(j).y;
+			vertexPositions->emplace_back(m * glm::vec4(x1, y1, 0.0f, 1.0f));
+			normalArray->emplace_back(m * glm::vec4(x1, y1, 0.0f, 0.0f));
+			indexA = index + j;
+			if (j == refinementSteps - 1)
+				indexB = index;
+			else
+				indexB = indexA + 1;
+			if (i == refinementSteps - 1)
+				indexC = j;
+			else
+				indexC = indexA + refinementSteps;
+			indexD = indexC + 1;
+			if (j == refinementSteps - 1)
+				indexD -= refinementSteps;
+			AddTriangleIndices(glm::uvec3(indexA, indexB, indexC), *indexArray);
+			AddTriangleIndices(glm::uvec3(indexB, indexD, indexC), *indexArray);
+		}
+	}
+
+	std::shared_ptr<RenderingObject> newObj = std::make_shared<RenderingObject>(std::move(inputShader),
+		std::move(vertexPositions),
+		std::move(indexArray),
+		std::move(normalArray));
+
+	return newObj;
+}
+
 std::shared_ptr<RenderingObject> CreateIcoSphere(std::shared_ptr<ShaderProgram> inputShader, float radius, int refinementSteps)
 {
     // First generate an icosahedron and then subdivide it to get the final sphere.

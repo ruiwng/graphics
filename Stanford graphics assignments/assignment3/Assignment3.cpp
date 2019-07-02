@@ -121,10 +121,10 @@ void Assignment3::SetupExample1()
     shader->SetDiffuse(glm::vec4(0.8f, 0.8f, 0.8f, 1.f));
     shader->SetAmbient(glm::vec4(0.5f));
 
-    std::shared_ptr<RenderingObject> sphereTemplate = PrimitiveCreator::CreateIcoSphere(shader, 5.f, 4);
-
+    // std::shared_ptr<RenderingObject> sphereTemplate = PrimitiveCreator::CreateIcoSphere(shader, 5.f, 4);
+	std::shared_ptr<RenderingObject> torusTemplate = PrimitiveCreator::CreateTorus(shader, 4.f, 1.5f, 100);
     // Give a R/G/B color to each vertex to visualize the sphere.
-    auto totalVertices = sphereTemplate->GetTotalVertices();
+    auto totalVertices = torusTemplate->GetTotalVertices();
 
     std::unique_ptr<RenderingObject::ColorArray> vertexColors = make_unique<RenderingObject::ColorArray>();
     vertexColors->reserve(totalVertices);
@@ -132,9 +132,9 @@ void Assignment3::SetupExample1()
     for (decltype(totalVertices) i = 0; i < totalVertices; ++i) {
         vertexColors->emplace_back(0.5f, 0.5f, 0.5f, 1.f);
     }
-    sphereTemplate->SetVertexColors(std::move(vertexColors));
+    torusTemplate->SetVertexColors(std::move(vertexColors));
 
-    sceneObject = std::make_shared<SceneObject>(sphereTemplate);
+    sceneObject = std::make_shared<SceneObject>(torusTemplate);
     scene->AddSceneObject(sceneObject);
 
     std::unique_ptr<LightProperties> lightProperties = make_unique<LightProperties>();
@@ -163,20 +163,23 @@ void Assignment3::SetupExample2()
     shader->SetDiffuse(glm::vec4(0.8f, 0.8f, 0.8f, 1.f));
     shader->SetAmbient(glm::vec4(0.5f));
 
-    std::vector<std::shared_ptr<RenderingObject>> meshTemplate = MeshLoader::LoadMesh(shader, "outlander/Model/Outlander_Model.obj");
+    std::vector<std::shared_ptr<RenderingObject>> meshTemplate = MeshLoader::LoadMesh(shader, "skull/12140_Skull_v3_L2.obj");
     if (meshTemplate.empty()) {
         std::cerr << "ERROR: Failed to load the model. Check your paths." << std::endl;
         return;
     }
 
     sceneObject = std::make_shared<SceneObject>(meshTemplate);
+	sceneObject->MultScale(0.3f);
+	sceneObject->Rotate(glm::vec3(1.0f, 0.0f, 0.0f), -PI / 2.0f);
+	sceneObject->Translate(glm::vec3(0.0f, -3.0f, 0.0f));
     scene->AddSceneObject(sceneObject);
 
     std::unique_ptr<LightProperties> lightProperties = make_unique<LightProperties>();
     lightProperties->diffuseColor = glm::vec4(0.5f, 0.5f, 0.5f, 1.f);
 
     pointLight = std::make_shared<Light>(std::move(lightProperties));
-    pointLight->SetPosition(glm::vec3(0.f, 0.f, 10.f));
+    pointLight->SetPosition(glm::vec3(3.f, 3.f, 10.f));
     scene->AddLight(pointLight);
 }
 
