@@ -88,7 +88,7 @@ vec4 pointLightSubroutine(vec4 N, vec4 worldPosition, vec3 worldNormal)
 {
     // Direction from the surface to the point light
     vec4 L = normalize(pointLight.pointPosition - vertexWorldPosition);
-	vec4 V = normalize(cameraPosition - vertexWorldPosition);
+	vec4 V = normalize(cameraPosition - worldPosition);
     float NdL = max(0, dot(N, L));
 	
     // Insert code for Section 3.2 here.
@@ -102,7 +102,7 @@ vec4 directionalLightSubroutine(vec4 N, vec4 worldPosition, vec3 worldNormal)
 {
     // Insert code for Section 3.3 here.
 	vec4 L = normalize(-genericLight.directionalLightDir);
-	vec4 V = normalize(cameraPosition - vertexWorldPosition);
+	vec4 V = normalize(cameraPosition - worldPosition);
 	float NdL = max(0, dot(N, L));
 	
 	vec4 d, s;
@@ -114,7 +114,7 @@ vec4 directionalLightSubroutine(vec4 N, vec4 worldPosition, vec3 worldNormal)
 vec4 hemisphereLightSubroutine(vec4 N, vec4 worldPosition, vec3 worldNormal)
 {
     // Insert code for Section 3.4 here.
-	vec4 V = normalize(cameraPosition - vertexWorldPosition);
+	vec4 V = normalize(cameraPosition - worldPosition);
 	float weight = (dot(N, vec4(0.0f, 1.0f, 0.0f, 0.0f)) + 1.0f) / 2.0f;
 	vec4 lightColor = mix(genericLight.diffuseColor, genericLight.specularColor, weight);
 	vec4 L = N;
@@ -128,7 +128,22 @@ vec4 hemisphereLightSubroutine(vec4 N, vec4 worldPosition, vec3 worldNormal)
 vec4 spotLightSubroutine(vec4 N, vec4 worldPosition, vec3 worldNormal)
 {
     // Insert code for Section 3.5 here.
-    return vec4(0.0);
+	vec4 V = normalize(cameraPosition - worldPosition);
+	vec4 L = normalize(pointLight.pointPosition - worldPosition);
+	float NdL = max(0, dot(N, L));
+	
+	vec4 lightDir = normalize(genericLight.directionalLightDir);
+	
+	float theta = dot(lightDir, -L);
+	float innerCutOff = cos(genericLight.spotInnerConeAngleDegrees * PI / 180.0f);
+	float outerCutOff = cos(genericLight.spotOuterConeAngleDegrees * PI / 180.0f);
+	
+	float density = (theta - outerCutOff) / (innerCutOff - outerCutOff);
+	density = clamp(density, 0.0f, 1.0f);
+	
+	vec4 d, s;
+	computeBRDF(N, L, V, d, s);
+    return NdL * (d * genericLight.diffuseColor + s * genericLight.specularColor) * density;
 }
 
 vec4 globalLightSubroutine(vec4 worldPosition, vec3 worldNormal)
