@@ -110,9 +110,14 @@ void Assignment4::SetupExample1()
         { GL_FRAGMENT_SHADER, "hw4/epic.frag"}
     };
     std::shared_ptr<EpicShader> shader = std::make_shared<EpicShader>(shaderSpec);
-    shader->SetMetallic(0.7);
-    shader->SetRoughness(0.65);
+    shader->SetMetallic(.2f);
+    shader->SetRoughness(.8f);
     shader->SetSpecular(glm::vec4(2.0f));
+	
+	std::shared_ptr<EpicShader> skullShader = std::make_shared<EpicShader>(shaderSpec);
+	shader->SetMetallic(.9f);
+	shader->SetRoughness(.2f);
+	shader->SetSpecular(glm::vec4(3.f));
 
     std::shared_ptr<EpicShader> groundShader = std::make_shared<EpicShader>(shaderSpec);
 
@@ -146,16 +151,16 @@ void Assignment4::SetupExample1()
     spotLight->Rotate(glm::vec3(SceneObject::GetWorldRight()), -M_PI / 2.f);
     scene->AddLight(spotLight);
 
-    GenericSetupExample(shader, groundShader);
+    GenericSetupExample(shader, skullShader, groundShader);
 
 }
 
-void Assignment4::GenericSetupExample(std::shared_ptr<ShaderProgram> shader, std::shared_ptr<ShaderProgram> groundShader)
+void Assignment4::GenericSetupExample(std::shared_ptr<ShaderProgram> shader, std::shared_ptr<ShaderProgram> skullShader, std::shared_ptr<ShaderProgram> groundShader)
 {
-    std::shared_ptr<RenderingObject> sphereTemplate = PrimitiveCreator::CreateIcoSphere(shader, 5.f, 4);
+    std::shared_ptr<RenderingObject> torusTemplate = PrimitiveCreator::CreateTorus(shader, 4.f, 1.5f, 100);
 
     // Give a R/G/B color to each vertex to visualize the sphere.
-    auto totalVertices = sphereTemplate->GetTotalVertices();
+    auto totalVertices = torusTemplate->GetTotalVertices();
 
     std::unique_ptr<RenderingObject::ColorArray> vertexColors = make_unique<RenderingObject::ColorArray>();
     vertexColors->reserve(totalVertices);
@@ -163,18 +168,26 @@ void Assignment4::GenericSetupExample(std::shared_ptr<ShaderProgram> shader, std
     for (decltype(totalVertices) i = 0; i < totalVertices; ++i) {
         vertexColors->emplace_back(1.f, 1.f, 1.0f, 1.f);
     }
-    sphereTemplate->SetVertexColors(std::move(vertexColors));
+    torusTemplate->SetVertexColors(std::move(vertexColors));
 
-    sphereDance.clear();
+    torusDance.clear();
     // 10x10 grid of spheres.
     for (int x = 0; x < 10; ++x)  {
         for (int y = 0; y < 10; ++y) {
-            std::shared_ptr<class SceneObject> sceneObject = std::make_shared<SceneObject>(sphereTemplate);
+            std::shared_ptr<class SceneObject> sceneObject = std::make_shared<SceneObject>(torusTemplate);
             sceneObject->SetPosition(glm::vec3(x * 12.f, 0.f, y * 12.f));
             scene->AddSceneObject(sceneObject);
-            sphereDance.push_back(sceneObject);
+            torusDance.push_back(sceneObject);
         }
     }
+
+	std::vector<std::shared_ptr<RenderingObject>> skullTemplate = MeshLoader::LoadMesh(skullShader, "skull/12140_Skull_v3_L2.obj");
+	skullObject = std::make_shared<SceneObject>(skullTemplate);
+	skullObject->SetPosition(glm::vec3(60.f, 0.f, 60.f));
+	skullObject->MultScale(2.f);
+	skullObject->Rotate(glm::vec3(1.0f, 0.0f, 0.0f), -PI / 2.f);
+	skullObject->Rotate(glm::vec3(0.0f, 1.f, 0.f), -PI / 2.f);
+	scene->AddSceneObject(skullObject);
 
     std::shared_ptr<RenderingObject> plane = PrimitiveCreator::CreatePlane(groundShader);
     std::shared_ptr<class SceneObject> groundObject = std::make_shared<SceneObject>(plane);
@@ -202,8 +215,11 @@ void Assignment4::Tick(double deltaTime)
     static float elapsedTime = 0.f;
     elapsedTime += deltaTime;
 
-    for (size_t i = 0; i < sphereDance.size(); ++i) {
-        glm::vec4 og = sphereDance[i]->GetPosition();
-        sphereDance[i]->SetPosition(glm::vec3(og.x, std::abs(std::sin(elapsedTime + (float)i)) * 6.f, og.z));
+    for (size_t i = 0; i < torusDance.size(); ++i) {
+        glm::vec4 og = torusDance[i]->GetPosition();
+		//torusDance[i]->Rotate(glm::vec3(1.0f, 0.0f, 0.0f), std::sin(elapsedTime / PI) * PI);
+        torusDance[i]->SetPosition(glm::vec3(og.x, std::abs(std::sin(elapsedTime + (float)i)) * 6.f, og.z));
     }
+	glm::vec4 skullPos = skullObject->GetPosition();
+	skullObject->SetPosition(glm::vec3(skullPos.x, 6.f + 6.f * std::abs(std::sin(elapsedTime)), skullPos.z));
 }
