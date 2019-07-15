@@ -13,8 +13,8 @@
 // For example:
 // #define APPLICATION Assignment2
 // #define APPLICATION Assignment3
-#define APPLICATION Assignment4
-// #define APPLICATION Assignment5
+// #define APPLICATION Assignment4
+#define APPLICATION Assignment5
 
 #include <iostream>
 #include <chrono>
