@@ -5,3 +5,5 @@ assignment1.exe -input scene1_04.txt -size 2000 2000 -output output1_04.tga -dep
 assignment1.exe -input scene1_05.txt -size 2000 2000 -output output1_05.tga -depth 14.5 19.5 depth1_05.tga
 assignment1.exe -input scene1_06.txt -size 2000 2000 -output output1_06.tga -depth 3 7 depth1_06.tga
 assignment1.exe -input scene1_07.txt -size 2000 2000 -output output1_07.tga -depth -2 2 depth1_07.tga
+assignment1.exe -input scene1_08.txt -size 2000 2000 -output output1_08.tga -depth 9 10 depth1_08.tga
+assignment1.exe -input scene1_09.txt -size 2000 2000 -output output1_09.tga -depth 12 15 depth1_09.tga

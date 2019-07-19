@@ -8,6 +8,7 @@
 #include "object3d.h"
 #include "group.h" 
 #include "sphere.h"
+#include "cylinder.h"
 #include "orthographic_camera.h"
 
 #define DegreesToRadians(x) ((M_PI * x) / 180.0f)
@@ -172,6 +173,9 @@ Object3D* SceneParser::parseObject(char token[MAX_PARSER_TOKEN_LENGTH]) {
 	else if (!strcmp(token, "Sphere")) {
 		answer = (Object3D*)parseSphere();
 	}
+	else if (!strcmp(token, "Cylinder")) {
+		answer = (Object3D*)parseCylinder();
+	}
 	else {
 		printf("Unknown token in parseObject: '%s'\n", token);
 		exit(0);
@@ -236,6 +240,23 @@ Sphere* SceneParser::parseSphere() {
 	getToken(token); assert(!strcmp(token, "}"));
 	assert(current_material != NULL);
 	return new Sphere(center, radius, current_material);
+}
+
+// ====================================================================
+// ====================================================================
+
+Cylinder* SceneParser::parseCylinder() {
+	char token[MAX_PARSER_TOKEN_LENGTH];
+	getToken(token); assert(!strcmp(token, "{"));
+	getToken(token); assert(!strcmp(token, "radius"));
+	float radius = readFloat();
+	getToken(token); assert(!strcmp(token, "minY"));
+	float minY = readFloat();
+	getToken(token); assert(!strcmp(token, "maxY"));
+	float maxY = readFloat();
+	getToken(token); assert(!strcmp(token, "}"));
+	assert(current_material != NULL);
+	return new Cylinder(radius, minY, maxY, current_material);
 }
 
 // ====================================================================
