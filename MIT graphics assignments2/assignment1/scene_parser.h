@@ -10,6 +10,7 @@ class Object3D;
 class Group;
 class Sphere;
 class Cylinder;
+class Cone;
 
 #define MAX_PARSER_TOKEN_LENGTH 100
 
@@ -49,6 +50,7 @@ private:
 	Group* parseGroup();
 	Sphere* parseSphere();
 	Cylinder* parseCylinder();
+	Cone* parseCone();
 
 	// HELPER FUNCTIONS
 	int getToken(char token[MAX_PARSER_TOKEN_LENGTH]);
