@@ -18,3 +18,4 @@ assignment2.exe -input scene2_15_crazy_transforms.txt -size 2000 2000 -output ou
 assignment2.exe -input scene2_16_t_scale.txt -size 2000 2000 -output output2_16.tga -depth 2 7 depth2_16.tga
 assignment2.exe -input scene2_17_cylinder.txt -size 2000 2000 -output output2_17.tga
 assignment2.exe -input scene2_18_cone.txt -size 2000 2000 -output output2_18.tga
+assignment2.exe -input scene2_19_triangle.txt -size 2000 2000 -output output2_19.tga -depth 9 11 depth2_19.tga -normals normals2_19.tga -shade_back
