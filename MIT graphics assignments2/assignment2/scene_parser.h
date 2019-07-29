@@ -15,6 +15,8 @@ class Triangle;
 class Transform;
 class Cylinder;
 class Cone;
+class CSG;
+class Cube;
 
 #define MAX_PARSER_TOKEN_LENGTH 100
 
@@ -60,6 +62,7 @@ private:
 	Material* parseMaterial();
 
 	Object3D* parseObject(char token[MAX_PARSER_TOKEN_LENGTH]);
+	CSG* parseCSG();
 	Group* parseGroup();
 	Sphere* parseSphere();
 	Cylinder* parseCylinder();
@@ -68,6 +71,7 @@ private:
 	Triangle* parseTriangle();
 	Group* parseTriangleMesh();
 	Transform* parseTransform();
+	Cube* parseCube();
 
 	// HELPER FUNCTIONS
 	int getToken(char token[MAX_PARSER_TOKEN_LENGTH]);

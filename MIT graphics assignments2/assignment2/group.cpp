@@ -1,6 +1,9 @@
 #include <assert.h>
 
 #include "group.h"
+#include "csg.h"
+#include "hit.h"
+
 
 Group::Group(int objectCount) {
 	objectArray.resize(objectCount);
@@ -19,4 +22,14 @@ bool Group::intersect(const Ray &r, Hit &h, float tmin) {
 			isHit = true;
 	}
 	return isHit;
+}
+
+bool Group::intersectAll(const Ray &r, std::vector<HitPair> &hitArray) {
+	for (Object3D *obj : objectArray) {
+		std::vector<HitPair> elementHitArray;
+		bool hit = obj->intersectAll(r, elementHitArray);
+		if (hit)
+			hitArray = CSG::computeUnion(hitArray, elementHitArray);
+	}
+	return !hitArray.empty();
 }

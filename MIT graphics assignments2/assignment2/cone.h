@@ -9,6 +9,7 @@ class Cone : public Object3D {
 public:
 	Cone(float radius, float minY, float maxY, Material *material);
 	virtual bool intersect(const Ray &r, Hit &h, float tmin);
+	virtual bool intersectAll(const Ray &r, std::vector<HitPair> &hitArray);
 
 private:
 	float radius;

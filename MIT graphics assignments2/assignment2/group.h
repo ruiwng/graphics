@@ -12,6 +12,8 @@ public:
 
 	void addObject(int index, Object3D *obj);
 	virtual bool intersect(const Ray &r, Hit &h, float tmin);
+	virtual bool intersectAll(const Ray &r, std::vector<HitPair> &hitArray);
+
 private:
 	std::vector<Object3D*> objectArray;
 };

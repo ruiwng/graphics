@@ -73,3 +73,31 @@ bool Sphere::intersect(const Ray &r, Hit &h, float tmin) {
 //	}
 //	return false;
 //}
+
+bool Sphere::intersectAll(const Ray &r, std::vector<HitPair> &hitArray) {
+	Vec3f OtoC = center - r.getOrigin();
+	Vec3f dir = r.getDirection();
+	float minT = OtoC.Dot3(dir);
+	Vec3f minPoint = r.getOrigin() + minT * r.getDirection();
+		
+	float r2 = radius * radius;
+	Vec3f a = minPoint - center;
+	float a2 = a.Dot3(a);
+	if (a2 > r2)
+		return false;
+	float b = sqrt(r2 - a2);
+	float deltaT = b / dir.Length();
+		
+	float t1 = minT - deltaT;
+	Vec3f normal = r.getOrigin() + t1 * r.getDirection() - center;
+	normal.Normalize();
+	Hit h1(t1, material, normal);
+	
+	float t2 = minT + deltaT;
+	normal = r.getDirection() + t2 * r.getDirection() - center;
+	normal.Normalize();
+	Hit h2(t2, material, normal);
+
+	hitArray.push_back(make_pair(h1, h2));
+	return true;
+}

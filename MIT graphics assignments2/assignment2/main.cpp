@@ -78,10 +78,11 @@ int main(int argc, char *argv[]) {
 	Camera *pCamera = pSceneParser->getCamera();
 	int numLights = pSceneParser->getNumLights();
 
-	for (int i = 0; i < width; ++i) {
-		for (int j = 0; j < height; ++j) {
+	for (int j = 0; j < height; ++j) {
+		for (int i = 0; i < width; ++i) {
 			Ray ray = pCamera->generateRay(Vec2f(float(i) / width, float(j) / height));
 			//Ray ray(Vec3f(-1.17500007, -0.400000095, 10.0000000), Vec3f(0.0f, 0.0f, -1.0f));
+			//Ray ray(Vec3f(0.0f, 0.0f, 10.0f), Vec3f(0.0f, 0.0f, -1.0f));
 			Hit hit(std::numeric_limits<float>::max(), nullptr, Vec3f(0.0f, 0.0f, 0.0f));
 			bool isHit = pGroup->intersect(ray, hit, pCamera->getTMin());
 			if (!isHit)

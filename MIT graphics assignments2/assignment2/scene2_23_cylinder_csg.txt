@@ -1,0 +1,45 @@
+
+OrthographicCamera {
+    center 0 10 10 
+    direction 0 -1 -1  
+    up 0 1 0
+    size 5
+}
+
+Lights {
+    numLights 1
+    DirectionalLight {
+        direction -1 -1 -1
+        color 0.8 0.8 0.8
+    }
+}
+
+Background {
+    color 0.2 0 0.6 
+    ambientLight 0 0 0 
+}
+
+Materials {
+    numMaterials 1
+    Material { 
+	diffuseColor 1 0 0
+    }
+}
+
+Group {
+    numObjects 1
+    MaterialIndex 0
+	CSG {
+		operation difference
+		Cylinder {
+			radius 1
+			minY -1
+			maxY 1
+		}
+		Cylinder {
+			radius 0.7
+			minY -2
+			maxY 2
+		}
+	}
+}

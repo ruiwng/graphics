@@ -17,6 +17,8 @@
 #include "plane.h"
 #include "triangle.h"
 #include "transform.h"
+#include "csg.h"
+#include "cube.h"
 
 #include "orthographic_camera.h"
 #include "perspective_camera.h"
@@ -281,6 +283,12 @@ Object3D* SceneParser::parseObject(char token[MAX_PARSER_TOKEN_LENGTH]) {
 	else if (!strcmp(token, "Transform")) {
 		answer = (Object3D*)parseTransform();
 	}
+	else if (!strcmp(token, "CSG")) {
+		answer = (Object3D*)parseCSG();
+	}
+	else if (!strcmp(token, "Cube")) {
+		answer = (Object3D*)parseCube();
+	}
 	else {
 		printf("Unknown token in parseObject: '%s'\n", token);
 		exit(0);
@@ -332,6 +340,40 @@ Group* SceneParser::parseGroup() {
 	return answer;
 }
 
+
+CSG* SceneParser::parseCSG() {
+	char token[MAX_PARSER_TOKEN_LENGTH];
+	getToken(token); assert(!strcmp(token, "{"));
+
+	getToken(token);
+	assert(!strcmp(token, "operation"));
+
+	getToken(token);
+	CSG_OP operation;
+	if (!strcmp(token, "union")) {
+		operation = CSG_UNION;
+	}
+	else if (!strcmp(token, "intersection")) {
+		operation = CSG_INTERSECTION;
+	}
+	else if (!strcmp(token, "difference")) {
+		operation = CSG_DIFFERENCE;
+	}
+	else {
+		assert(false);
+	}
+
+	getToken(token);
+	Object3D *leftChild = parseObject(token);
+
+	getToken(token);
+	Object3D *rightChild = parseObject(token);
+
+	getToken(token); assert(!strcmp(token, "}"));
+
+	return new CSG(leftChild, rightChild, operation);
+}
+
 // ====================================================================
 // ====================================================================
 
@@ -377,6 +419,13 @@ Cone* SceneParser::parseCone() {
 	return new Cone(radius, minY, maxY, current_material);
 }
 
+Cube* SceneParser::parseCube() {
+	char token[MAX_PARSER_TOKEN_LENGTH];
+	getToken(token); assert(!strcmp(token, "{"));
+	getToken(token); assert(!strcmp(token, "}"));
+	assert(current_material != NULL);
+	return new Cube(current_material);
+}
 
 Plane* SceneParser::parsePlane() {
 	char token[MAX_PARSER_TOKEN_LENGTH];

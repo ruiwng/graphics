@@ -28,3 +28,31 @@ bool Transform::intersect(const Ray &r, Hit &h, float tmin) {
 	h.set(h.getT(), h.getMaterial(), normal, r);
 	return true;
 }
+
+bool Transform::intersectAll(const Ray &r, std::vector<HitPair> &hitArray) {
+	Vec3f o = r.getOrigin();
+	inverseTransform.Transform(o);
+	Vec3f d = r.getDirection();
+	inverseTransform.TransformDirection(d);
+
+	Ray newRay(o, d);
+
+	bool isIntersect = object->intersectAll(newRay, hitArray);
+	if (!isIntersect)
+		return false;
+
+	for (auto &hitPair : hitArray) {
+		Hit &first = hitPair.first;
+		Vec3f normal = first.getNormal();
+		inverseTransposeTransform.TransformDirection(normal);
+		normal.Normalize();
+		first = Hit(first.getT(), first.getMaterial(), normal);
+
+		Hit &second = hitPair.second;
+		normal = second.getNormal();
+		inverseTransposeTransform.TransformDirection(normal);
+		normal.Normalize();
+		second = Hit(second.getT(), second.getMaterial(), normal);
+	}
+	return true;
+}

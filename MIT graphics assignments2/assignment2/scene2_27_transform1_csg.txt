@@ -1,0 +1,56 @@
+
+PerspectiveCamera {
+	center 10 10 10 
+    direction -1 -1 -1
+    up 0 1 0
+    angle 30
+}
+
+Lights {
+    numLights 1
+    DirectionalLight {
+        direction -1 -1 -1
+        color 1.0 1.0 1.0
+    }
+}
+
+Background {
+    color 0.2 0 0.6 
+    ambientLight 0 0 0 
+}
+
+Materials {
+    numMaterials 2
+    Material { 
+	diffuseColor 1 0 0
+    }
+	Material {
+	diffuseColor 0 0 1
+	}
+}
+
+Group {
+    numObjects 1
+    MaterialIndex 0
+	CSG {
+		operation intersection
+		Group {
+			numObjects 1
+			MaterialIndex 0
+			Transform {
+			UniformScale 2.0
+			Cube {
+			}
+			}
+		}
+		
+		Group {
+			numObjects 1
+			MaterialIndex 1
+			Sphere {
+				center 0 0 0
+				radius 2.6
+			}	
+		}	
+	}
+}

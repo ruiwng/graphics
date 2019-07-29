@@ -10,6 +10,7 @@ class Cylinder : public Object3D {
 public:
 	Cylinder(float radius, float minY, float maxY, Material *material);
 	virtual bool intersect(const Ray &r, Hit &h, float tmin);
+	virtual bool intersectAll(const Ray &r, std::vector<HitPair> &hitArray);
 
 private:
 	float radius;
