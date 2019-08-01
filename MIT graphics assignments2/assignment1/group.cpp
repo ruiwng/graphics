@@ -6,6 +6,13 @@ Group::Group(int objectCount) {
 	objectArray.resize(objectCount);
 }
 
+Group::~Group() {
+	for (Object3D* obj : objectArray) {
+		delete obj;
+	}
+	objectArray.clear();
+}
+
 void Group::addObject(int index, Object3D *obj) {
 	assert(index >= 0 && index < objectArray.size());
 	objectArray[index] = obj;

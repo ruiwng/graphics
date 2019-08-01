@@ -8,6 +8,7 @@
 class Group : public Object3D {
 public:
 	Group() {}
+	~Group();
 	Group(int objectCount);
 
 	void addObject(int index, Object3D *obj);

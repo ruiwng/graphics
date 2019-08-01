@@ -97,5 +97,9 @@ int main(int argc, char *argv[]) {
 	delete pSceneParser;
 	delete pImage;
 	
+	if (pDepthImage != nullptr) {
+		delete pDepthImage;
+		pDepthImage = nullptr;
+	}
 	return 0;
 }
