@@ -47,7 +47,6 @@ void parseCmdLine(int argc, char *argv[]) {
 		}
 		else if (strcmp(argv[i], "-shade_back") == 0) {
 			isShadeBack = true;
-			++i;
 		}
 		else {
 			printf("whoops error with command line argument %d: '%s'\n", i, argv[i]);
